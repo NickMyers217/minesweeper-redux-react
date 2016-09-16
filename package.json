@@ -1,0 +1,21 @@
+{
+  "name": "minesweeper",
+  "version": "1.0.0",
+  "description": "Minesweepr in an ES6 functional style",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --watch"
+  },
+  "author": "NickMyers217",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "^6.14.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.14.0",
+    "webpack": "^1.13.2"
+  },
+  "dependencies": {
+    "ramda": "^0.22.1"
+  }
+}
