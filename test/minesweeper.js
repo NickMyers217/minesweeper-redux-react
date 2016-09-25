@@ -1,9 +1,11 @@
-import { expect } from 'chai';
+/* global describe, it */
 
-import { minesweeper, defaultState } from '../src'
+import { expect } from 'chai'
 
-describe('Minesweeper reducers', () => {
-	it('Initial state is correct', () => {
-		expect(minesweeper()).to.equal(defaultState);
-	});
-});
+import minesweeper from '../src/reducers'
+
+describe('Minesweeper', () => {
+  it('Initial state has an initial board', () => {
+    expect(minesweeper().board).to.be.a('array')
+  })
+})
