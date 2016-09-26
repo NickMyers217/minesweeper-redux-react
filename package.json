@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "standard",
     "test": "mocha --require babel-register",
-    "build": "webpack --watch"
+    "build": "webpack",
+    "build:watch": "webpack --watch"
   },
   "author": "NickMyers217",
   "license": "MIT",
