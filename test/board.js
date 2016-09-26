@@ -1,9 +1,10 @@
 /* global describe, it */
 
 import { expect } from 'chai'
+import { Map } from 'immutable'
 
 import cell from '../src/reducers/cell'
-import board, { getCell, emptyBoard } from '../src/reducers/board'
+import board, { emptyBoard } from '../src/reducers/board'
 import * as actions from '../src/actions'
 
 describe('Board', () => {
@@ -16,25 +17,32 @@ describe('Board', () => {
   })
 
   it('can access and read a cell at a given (x, y) position', () => {
-    expect(getCell(0, 3, testBoard))
-      .to.deep.equal({
+    expect(testBoard.get(3).get(0))
+      .to.equal(Map({
         type: 'EMPTY',
         isFlagged: false,
         isVisible: false
-      })
-
-    expect(() => getCell(-1, 3, testBoard)).to.throw(Error)
+      }))
   })
 
   it('can update a cell at a given (x, y) position', () => {
     const bombAction = actions.updateCell(1, 3, actions.setCellBomb())
     const bombBoard = board(testBoard, bombAction)
-
-    expect(getCell(1, 3, bombBoard))
-      .to.deep.equal({
+    expect(bombBoard.get(3).get(1))
+      .to.equal(Map({
         type: 'BOMB',
         isFlagged: false,
         isVisible: false
-      })
+      }))
+
+    const numAction = actions.updateCell(2, 4, actions.setCellNumber(3))
+    const numBoard = board(testBoard, numAction)
+    expect(numBoard.get(4).get(2))
+      .to.equal(Map({
+        type: 'NUMBER',
+        isFlagged: false,
+        isVisible: false,
+        value: 3
+      }))
   })
 })

@@ -13,6 +13,6 @@ describe('Minesweeper', () => {
     store.dispatch(actions.createEmptyBoard(10, 10))
 
     expect(store.getState().board)
-      .to.be.a('array')
+      .to.not.be.undefined
   })
 })
