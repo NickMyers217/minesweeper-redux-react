@@ -1,64 +1,51 @@
 /* global describe, it */
 
 import { expect } from 'chai'
-import { fromJS } from 'immutable'
+import { Map } from 'immutable'
 
 import cell from '../src/reducers/cell'
 import * as actions from '../src/actions'
 
 describe('Cell', () => {
-  const emptyCell = {
+  const emptyCell = Map({
     type: 'EMPTY',
     isFlagged: false,
     isVisible: false
-  }
-  const bombCell = {
-    type: 'BOMB',
-    isFlagged: false,
-    isVisible: false
-  }
-  const numFiveCell = {
-    type: 'NUMBER',
-    value: 5,
-    isFlagged: false,
-    isVisible: false
-  }
-  const visibleCell = {
-    type: 'EMPTY',
-    isFlagged: false,
-    isVisible: true
-  }
-  const nonVisibleCell = {
-    type: 'EMPTY',
-    isFlagged: false,
-    isVisible: false
-  }
+  })
+  const bombCell = emptyCell
+    .set('type', 'BOMB')
+  const numFiveCell = emptyCell
+    .set('type', 'NUMBER')
+    .merge(Map({ value: 5 }))
+  const visibleCell = emptyCell
+    .set('isVisible', true)
+  const nonVisibleCell = emptyCell
 
   it('a default empty cell is initialized correctly', () => {
     expect(cell({}, actions.createEmptyCell()))
-      .to.deep.equal(emptyCell)
+      .to.equal(emptyCell)
   })
 
   it('can turn an empty cell into a bomb. Only an empty cell', () => {
     expect(cell(emptyCell, actions.setCellBomb()))
-      .to.deep.equal(bombCell)
+      .to.equal(bombCell)
 
     expect(cell(bombCell, actions.setCellBomb()))
-      .to.deep.equal(bombCell)
+      .to.equal(bombCell)
 
     expect(cell(numFiveCell, actions.setCellBomb()))
-      .to.deep.equal(numFiveCell)
+      .to.equal(numFiveCell)
   })
 
   it('can turn an empty cell into a number. Only an empty cell', () => {
     expect(cell(emptyCell, actions.setCellNumber(5)))
-      .to.deep.equal(numFiveCell)
+      .to.equal(numFiveCell)
 
     expect(cell(bombCell, actions.setCellNumber(5)))
-      .to.deep.equal(bombCell)
+      .to.equal(bombCell)
 
     expect(cell(numFiveCell, actions.setCellNumber(5)))
-      .to.deep.equal(numFiveCell)
+      .to.equal(numFiveCell)
   })
 
   it('can make a cell visible, but only if its not flagged', () => {
@@ -71,21 +58,20 @@ describe('Cell', () => {
     expect(cell(numFiveCell, actions.setCellVisible()))
       .to.have.any.keys({'isVisible': true})
 
-    expect(cell(Object.assign({}, emptyCell, {isFlagged: true}),
-                actions.setCellVisible()))
-      .to.deep.equal(Object.assign({}, emptyCell, {isFlagged: true}))
+    expect(cell(emptyCell.set('isFlagged', true), actions.setCellVisible()))
+      .to.equal(emptyCell.set('isFlagged', true))
   })
 
   it('can flag an non visible cell, but not a visible one', () => {
     expect(cell(nonVisibleCell, actions.setCellFlagged()))
-      .to.deep.equal(Object.assign({}, nonVisibleCell, {isFlagged: true}))
+      .to.equal(nonVisibleCell.set('isFlagged', true))
 
     expect(cell(visibleCell, actions.setCellFlagged()))
-      .to.deep.equal(visibleCell)
+      .to.equal(visibleCell)
   })
 
   it('flagging a flagged cell unflags it', () => {
-    expect(cell(Object.assign({}, emptyCell, {isFlagged: true}), actions.setCellFlagged()))
-      .to.deep.equal(emptyCell)
+    expect(cell(emptyCell.set('isFlagged', true), actions.setCellFlagged()))
+      .to.equal(emptyCell)
   })
 })
