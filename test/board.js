@@ -2,10 +2,16 @@
 
 import { expect } from 'chai'
 
+import cell from '../src/reducers/cell'
 import board, { emptyBoard } from '../src/reducers/board'
+import * as actions from '../src/actions'
 
 describe('Board', () => {
-  it('Initial state is an empty 10 x 10 board', () => {
-    expect(board()).to.equal(emptyBoard)
+  const testBoard = emptyBoard(10, 5, () =>
+    cell({}, actions.createEmptyCell()))
+
+  it('can create an empty board of a specific width and height', () => {
+    expect(board([], actions.createEmptyBoard(10, 5)))
+      .to.deep.equal(testBoard)
   })
 })
