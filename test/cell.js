@@ -1,6 +1,7 @@
 /* global describe, it */
 
 import { expect } from 'chai'
+import { fromJS } from 'immutable'
 
 import cell from '../src/reducers/cell'
 import * as actions from '../src/actions'

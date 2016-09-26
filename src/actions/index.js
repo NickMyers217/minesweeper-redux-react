@@ -26,3 +26,10 @@ export const createEmptyBoard = (width, height) => ({
   width,
   height
 })
+
+export const updateCell = (x, y, cellAction) => ({
+  type: 'UPDATE_CELL',
+  x,
+  y,
+  cellAction
+})
