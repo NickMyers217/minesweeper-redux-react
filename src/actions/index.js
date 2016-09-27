@@ -42,3 +42,23 @@ export const placeBombs = (count = 0) => ({
 export const calculateNumbers = () => ({
   type: 'CALCULATE_NUMBERS'
 })
+
+// Minesweeper actions
+export const newGame = ({ width = 10, height = 10, bombs = 10 }) => ({
+  type: 'NEW_GAME',
+  width,
+  height,
+  bombs
+})
+
+export const leftClick = (x, y) => ({
+  type: 'LEFT_CLICK',
+  x,
+  y
+})
+
+export const rightClick = (x, y) => ({
+  type: 'RIGHT_CLICK',
+  x,
+  y
+})
