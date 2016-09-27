@@ -14,7 +14,7 @@ const cell = (state = Map({}), { type, value }) => {
         ? state.set('type', 'BOMB') : state
 
     case 'SET_CELL_NUMBER':
-      return state.get('type') === 'EMPTY'
+      return state.get('type') === 'EMPTY' && value > 0
         ? state.set('type', 'NUMBER').set('value', value) : state
 
     case 'SET_CELL_VISIBLE':

@@ -37,7 +37,7 @@ describe('Cell', () => {
       .to.equal(numFiveCell)
   })
 
-  it('can turn an empty cell into a number. Only an empty cell', () => {
+  it('can turn an empty cell into a number greater than zero. Only an empty cell', () => {
     expect(cell(emptyCell, actions.setCellNumber(5)))
       .to.equal(numFiveCell)
 
@@ -46,6 +46,9 @@ describe('Cell', () => {
 
     expect(cell(numFiveCell, actions.setCellNumber(5)))
       .to.equal(numFiveCell)
+
+    expect(cell(emptyCell, actions.setCellNumber(0)))
+      .to.equal(emptyCell)
   })
 
   it('can make a cell visible, but only if its not flagged', () => {

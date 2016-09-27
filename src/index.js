@@ -5,7 +5,9 @@ import * as actions from './actions'
 
 const store = createStore(minesweeper)
 
-store.dispatch(actions.createEmptyBoard(10, 5))
+store.dispatch(actions.createEmptyBoard())
+store.dispatch(actions.placeBombs(10))
+store.dispatch(actions.calculateNumbers())
 
 document.body.innerHTML = `
   <div><pre><code>

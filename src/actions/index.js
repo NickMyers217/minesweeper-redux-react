@@ -21,7 +21,7 @@ export const setCellFlagged = () => ({
 })
 
 // Board actions
-export const createEmptyBoard = (width, height) => ({
+export const createEmptyBoard = (width = 10, height = 10) => ({
   type: 'CREATE_EMPTY_BOARD',
   width,
   height
@@ -32,4 +32,13 @@ export const updateCell = (x, y, cellAction) => ({
   x,
   y,
   cellAction
+})
+
+export const placeBombs = (count = 0) => ({
+  type: 'PLACE_BOMBS',
+  count
+})
+
+export const calculateNumbers = () => ({
+  type: 'CALCULATE_NUMBERS'
 })
