@@ -1,11 +1,17 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { render } from 'react-dom'
 import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 
+import App from './components/App'
 import minesweeper, { Difficulties } from './reducers'
 import * as actions from './actions'
 
 const store = createStore(minesweeper)
-store.dispatch(actions.newGame(Difficulties.EASY))
 
-ReactDOM.render(<h1>hello world!</h1>, document.getElementById('app'))
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('app')
+)
