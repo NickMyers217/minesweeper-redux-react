@@ -44,7 +44,7 @@ export const calculateNumbers = () => ({
 })
 
 // Minesweeper actions
-export const newGame = ({ width = 10, height = 10, bombs = 10 }) => ({
+export const newGame = ({width, height, bombs}) => ({
   type: 'NEW_GAME',
   width,
   height,
