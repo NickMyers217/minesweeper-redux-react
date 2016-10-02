@@ -1,6 +1,6 @@
 import { Map } from 'immutable'
 
-import board from './board'
+import board, { getCascadeCoords } from './board'
 import * as actions from '../actions'
 
 export const Difficulties = {
@@ -36,6 +36,8 @@ export const isGameWon = (state) => {
 }
 
 const minesweeper = (state = Map({}), action) => {
+  const {x, y} = action
+
   switch (action.type) {
     case 'NEW_GAME':
       const { width, height, bombs } = action
@@ -52,18 +54,37 @@ const minesweeper = (state = Map({}), action) => {
         .set('gameWon', false)
 
     case 'LEFT_CLICK':
-      const visibleAction = actions
-        .updateCell(action.x,
-                    action.y,
-                    actions.setCellVisible())
-      return state
-        .update('board', b => board(b, visibleAction))
+      // TODO: Debug why this isnt working
+      const needsCascade = state
+        .getIn(['board', y, x, 'type']) === 'EMPTY'
+
+      const visibilityActions = needsCascade
+        ? [actions.updateCell(x, y, actions.setCellVisible())]
+        : getCascadeCoords({x, y}, state.get('board'))
+            .map(({x, y}) => actions.updateCell(x, y, actions.setCellVisible()))
+
+      const updatedBoardState = state
+        .update('board', b => {
+          return visibilityActions.reduce((curState, curAction) => (
+            board(curState, curAction)
+          ), state.get('board'))
+        })
+
+      if (isGameLoss(updatedBoardState)) {
+        return updatedBoardState
+          .set('gameLoss', true)
+      }
+
+      if (isGameWon(updatedBoardState)) {
+        return updatedBoardState
+          .set('gameWon', true)
+      }
+
+      return updatedBoardState
 
     case 'RIGHT_CLICK':
       const flaggedAction = actions
-        .updateCell(action.x,
-                    action.y,
-                    actions.setCellFlagged())
+        .updateCell(x, y, actions.setCellFlagged())
       return state
         .update('board', b => board(b, flaggedAction))
 
