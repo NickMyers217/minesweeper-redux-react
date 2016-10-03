@@ -2,7 +2,11 @@ import { List, Map, Range } from 'immutable'
 import { range, uniq, curry } from 'ramda'
 
 import cell from './cell'
-import * as actions from '../actions'
+import { createEmptyCell
+       , updateCell
+       , setCellBomb
+       , setCellNumber
+       } from '../actions'
 
 const getRandomInt = (max) => Math.floor(Math.random() * max)
 
@@ -55,7 +59,7 @@ export const getCascadeCoords = ({ x, y }, board) => {
   let firstCall = true
 
   const addToCoordsList = (nx, ny) => {
-    const { type, isVisible } = board.getIn([ny, nx]).toJS()
+    const {type, isVisible} = board.getIn([ny, nx]).toJS()
     const isEmpty = type === 'EMPTY'
     const isBomb = type === 'BOMB'
     const isInList = coords
@@ -69,7 +73,7 @@ export const getCascadeCoords = ({ x, y }, board) => {
       processNeighbors()
     } else {
       if (!isInList && !isBomb && !isVisible) {
-        coords.push({ x: nx, y: ny })
+        coords.push({x: nx, y: ny})
 
         if (isEmpty) processNeighbors()
       }
@@ -84,22 +88,22 @@ export const getCascadeCoords = ({ x, y }, board) => {
 const board = (state = List([]), action) => {
   switch (action.type) {
     case 'CREATE_EMPTY_BOARD':
-      const { width, height } = action
+      const {width, height} = action
 
       return emptyBoard(width, height, () =>
-        cell(Map({}), actions.createEmptyCell()))
+        cell(Map({}), createEmptyCell()))
 
     case 'UPDATE_CELL':
-      const { x, y, cellAction } = action
+      const {x, y, cellAction} = action
       const newCell = cell(state.get(y).get(x), cellAction)
 
       return state.set(y, state.get(y).set(x, newCell))
 
     case 'PLACE_BOMBS':
-      const { count } = action
+      const {count} = action
       const coords = getRandomCoordinates(count, state.get(0).count(), state.count())
       const bombActions = coords
-        .map(({x, y}) => actions.updateCell(x, y, actions.setCellBomb()))
+        .map(({x, y}) => updateCell(x, y, setCellBomb()))
 
       return bombActions
         .reduce((curState, curAction) => board(curState, curAction), state)
@@ -115,7 +119,7 @@ const board = (state = List([]), action) => {
               .map(({x, y}) => state.getIn([ y, x, 'type' ]))
               .filter(t => t === 'BOMB')
               .length
-            return cell(c, actions.setCellNumber(number))
+            return cell(c, setCellNumber(number))
           }))
 
     default:

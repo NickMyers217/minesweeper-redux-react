@@ -44,11 +44,12 @@ export const calculateNumbers = () => ({
 })
 
 // Minesweeper actions
-export const newGame = ({width, height, bombs}) => ({
+export const newGame = ({width, height, bombs, text}) => ({
   type: 'NEW_GAME',
   width,
   height,
-  bombs
+  bombs,
+  text
 })
 
 export const leftClick = (x, y) => ({
