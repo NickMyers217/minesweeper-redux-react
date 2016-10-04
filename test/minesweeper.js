@@ -71,6 +71,7 @@ describe('Minesweeper', () => {
 
         expect(store.getState())
           .to.equal(Map({
+            difficulties: Difficulties,
             board: store.getState().get('board'),
             difficulty: Difficulties.EASY.text,
             bombCount: Difficulties.EASY.bombs,

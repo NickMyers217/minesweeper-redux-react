@@ -41,7 +41,7 @@ export const isGameWon = (state) => {
   )
 }
 
-const minesweeper = (state = Map({}), action) => {
+const minesweeper = (state = Map({difficulties: Difficulties}), action) => {
   const {x, y} = action
 
   switch (action.type) {

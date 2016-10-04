@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { leftClick } from '../actions'
+import { leftClick, rightClick, newGame } from '../actions'
 
 const cellToText = (cell) => {
   const {isVisible, isFlagged, type, value} = cell
@@ -19,27 +19,54 @@ const cellToText = (cell) => {
   return '_'
 }
 
-const Game = ({state, onLeftClick}) => (
+const Game = ({state, onNewGame, onLeftClick, onRightClick}) => (
   <div>
     <span>
-      Bombs: {state.bombCount.toString()} |
-      Difficulty: {state.difficulty} |
-      Win: {state.gameWon.toString()} |
-      Loss: {state.gameLoss.toString()}
+      Bombs: {state.bombCount || ''} |
+      Difficulty: {state.difficulty || ''} |
+      Win: {state.gameWon ? 'yes' : 'no'} |
+      Loss: {state.gameLoss ? 'yes' : 'no'}
     </span>
+
     <div>
-      {state.board.map((r, y) => (
-        <div key={y}>
-          {r.map((c, x) => (
-            <button
-              key={x}
-              style={{width: '30px', height: '30px'}}
-              onClick={() => onLeftClick(x, y)}>
-              {cellToText(c)}
-            </button>
-          ))}
-        </div>
-      ))}
+      {state.board !== undefined
+        ? state.board.map((r, y) => (
+            <div key={y}>
+              {r.map((c, x) => (
+                <button
+                  key={x}
+                  style={{width: '30px', height: '30px'}}
+                  // TODO: Handle both left and right click
+                  onClick={() => onLeftClick(x, y)}
+                  onContextMenu={(e) => {
+                    e.preventDefault()
+                    onRightClick(x, y)
+                  }}>
+                  {cellToText(c)}
+                </button>
+              ))}
+            </div>
+          ))
+        : <div>:(</div>
+      }
+    </div>
+
+    <div>
+      <p>Start a new game:</p>
+      <span>
+        {
+          Object
+            .keys(state.difficulties)
+            .map(key => state.difficulties[key])
+            .map((difficulty, id) => (
+              <button
+                key={id}
+                onClick={() => onNewGame(difficulty)}>
+                {difficulty.text}
+              </button>
+            ))
+        }
+      </span>
     </div>
   </div>
 )
@@ -49,12 +76,15 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  // TODO: Make props for the actions
   onLeftClick: (x, y) => {
     dispatch(leftClick(x, y))
+  },
+  onNewGame: (difficulty) => {
+    dispatch(newGame(difficulty))
+  },
+  onRightClick: (x, y) => {
+    dispatch(rightClick(x, y))
   }
-  // rightClick
-  // newGame
 })
 
 const SimpleTextRenderer = connect(
