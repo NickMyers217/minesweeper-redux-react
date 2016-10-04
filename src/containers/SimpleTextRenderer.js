@@ -31,22 +31,21 @@ const Game = ({state, onNewGame, onLeftClick, onRightClick}) => (
     <div>
       {state.board !== undefined
         ? state.board.map((r, y) => (
-            <div key={y}>
-              {r.map((c, x) => (
-                <button
-                  key={x}
-                  style={{width: '30px', height: '30px'}}
-                  // TODO: Handle both left and right click
-                  onClick={() => onLeftClick(x, y)}
-                  onContextMenu={(e) => {
-                    e.preventDefault()
-                    onRightClick(x, y)
-                  }}>
-                  {cellToText(c)}
-                </button>
-              ))}
-            </div>
-          ))
+          <div key={y}>
+            {r.map((c, x) => (
+              <button
+                key={x}
+                style={{width: '30px', height: '30px'}}
+                onClick={() => onLeftClick(x, y)}
+                onContextMenu={(e) => {
+                  e.preventDefault()
+                  onRightClick(x, y)
+                }}>
+                {cellToText(c)}
+              </button>
+            ))}
+          </div>
+        ))
         : <div>:(</div>
       }
     </div>

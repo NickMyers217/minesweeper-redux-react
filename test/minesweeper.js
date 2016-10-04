@@ -5,9 +5,12 @@ import { Map } from 'immutable'
 import { createStore } from 'redux'
 import { uniq } from 'ramda'
 
-import minesweeper, { Difficulties, isGameLoss, isGameWon } from '../src/reducers'
 import { getCascadeCoords } from '../src/reducers/board'
 import * as actions from '../src/actions'
+import minesweeper, { Difficulties
+                    , isGameLoss
+                    , isGameWon
+                    } from '../src/reducers'
 
 describe('Minesweeper', () => {
   describe('#isGameLoss()', () => {
@@ -154,6 +157,34 @@ describe('Minesweeper', () => {
         expect(store.getState().get('gameWon'))
           .to.equal(true)
       })
+
+      it('cannot left click any cell if the game has been lost', () => {
+        const store = createStore(minesweeper)
+        store.dispatch(actions.newGame(Difficulties.EASY))
+
+        const allCells = store
+          .getState()
+          .get('board')
+          .flatMap((row, y) => row
+            .map((c, x) => ({type: c.get('type'), x, y})))
+
+        const firstBomb = allCells
+          .filter(c => c.type === 'BOMB')
+          .first()
+
+        const firstEmpty = allCells
+          .filter(c => c.type === 'EMPTY')
+          .first()
+
+        store.dispatch(actions.leftClick(firstBomb.x, firstBomb.y))
+        expect(store.getState().get('gameLoss')).to.equal(true)
+
+        store.dispatch(actions.leftClick(firstEmpty.x, firstEmpty.y))
+        expect(
+          store.getState()
+            .getIn(['board', firstEmpty.y, firstEmpty.x, 'isVisible'])
+        ).to.equal(false)
+      })
     })
 
     describe('#rightClick()', () => {
@@ -168,6 +199,34 @@ describe('Minesweeper', () => {
         store.dispatch(actions.rightClick(1, 2))
         expect(store.getState().getIn(['board', 2, 1, 'isFlagged']))
           .to.equal(false)
+      })
+
+      it('cannot right click any cell if the game has been lost', () => {
+        const store = createStore(minesweeper)
+        store.dispatch(actions.newGame(Difficulties.EASY))
+
+        const allCells = store
+          .getState()
+          .get('board')
+          .flatMap((row, y) => row
+            .map((c, x) => ({type: c.get('type'), x, y})))
+
+        const firstBomb = allCells
+          .filter(c => c.type === 'BOMB')
+          .first()
+
+        const firstEmpty = allCells
+          .filter(c => c.type === 'EMPTY')
+          .first()
+
+        store.dispatch(actions.leftClick(firstBomb.x, firstBomb.y))
+        expect(store.getState().get('gameLoss')).to.equal(true)
+
+        store.dispatch(actions.rightClick(firstEmpty.x, firstEmpty.y))
+        expect(
+          store.getState()
+            .getIn(['board', firstEmpty.y, firstEmpty.x, 'isFlagged'])
+        ).to.equal(false)
       })
     })
   })

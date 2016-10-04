@@ -61,6 +61,10 @@ const minesweeper = (state = Map({difficulties: Difficulties}), action) => {
         .set('gameWon', false)
 
     case 'LEFT_CLICK':
+      if (state.get('gameLoss') || state.get('gameWon')) {
+        return state
+      }
+
       const needsCascade = state
         .getIn(['board', y, x, 'type']) === 'EMPTY'
 
@@ -87,6 +91,10 @@ const minesweeper = (state = Map({difficulties: Difficulties}), action) => {
       return updatedBoardState
 
     case 'RIGHT_CLICK':
+      if (state.get('gameLoss') || state.get('gameWon')) {
+        return state
+      }
+
       return state
         .update('board', b => board(b, updateCell(x, y, setCellFlagged())))
 
