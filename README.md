@@ -37,4 +37,4 @@ Run all of the project unit tests
 ```bash
 npm run lint
 ```
-~se standard.js to show linting errors and warnings
+Use standard.js to show linting errors and warnings
