@@ -1,9 +1,9 @@
 import React from 'react'
-import SimpleTextRenderer from '../containers/SimpleTextRenderer'
+import SimpleRenderer from '../containers/SimpleRenderer'
 
 const App = () => (
   <div>
-    <SimpleTextRenderer />
+    <SimpleRenderer />
   </div>
 )
 

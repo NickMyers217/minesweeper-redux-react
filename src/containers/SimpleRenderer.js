@@ -6,9 +6,7 @@ import { leftClick, rightClick, newGame } from '../actions'
 const cellToText = (cell) => {
   const {isVisible, isFlagged, type, value} = cell
 
-  if (isFlagged) {
-    return 'f'
-  }
+  if (isFlagged) return 'f'
 
   if (isVisible) {
     if (type === 'EMPTY') return 'x'
@@ -17,6 +15,31 @@ const cellToText = (cell) => {
   }
 
   return '_'
+}
+
+const getCellColor = (cell) => {
+  const {isVisible, isFlagged, type, value} = cell
+
+  if (isFlagged) return 'red'
+
+  if (isVisible) {
+    if (type === 'EMPTY' || type === 'BOMB') return 'black'
+    else {
+      switch (value) {
+        case 1: return 'blue'
+        case 2: return 'green'
+        case 3: return 'red'
+        case 4: return 'purple'
+        case 5: return 'maroon'
+        case 6: return 'turquoise'
+        case 7: return 'black'
+        case 8: return 'gray'
+        default: return 'black'
+      }
+    }
+  }
+
+  return 'black'
 }
 
 const Game = ({state, onNewGame, onLeftClick, onRightClick}) => (
@@ -35,7 +58,7 @@ const Game = ({state, onNewGame, onLeftClick, onRightClick}) => (
             {r.map((c, x) => (
               <button
                 key={x}
-                style={{width: '30px', height: '30px'}}
+                style={{width: '30px', height: '30px', color: getCellColor(c)}}
                 onClick={() => onLeftClick(x, y)}
                 onContextMenu={(e) => {
                   e.preventDefault()
@@ -86,9 +109,9 @@ const mapDispatchToProps = (dispatch) => ({
   }
 })
 
-const SimpleTextRenderer = connect(
+const SimpleRenderer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(Game)
 
-export default SimpleTextRenderer
+export default SimpleRenderer
